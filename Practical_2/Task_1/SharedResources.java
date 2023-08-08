@@ -1,9 +1,11 @@
 import java.util.concurrent.locks.Lock;
 
-public class SharedResources {
+public class SharedResources
+{
     Lock l;
 
-	public void access(){
+	public void access()
+	{
 
 	}
 }
