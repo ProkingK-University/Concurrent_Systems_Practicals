@@ -7,9 +7,9 @@ import java.util.concurrent.locks.Condition;
 
 public class Filter implements Lock
 {
-	private int[] level;
-    private int[] victim;
 	private int numberOfThreads;
+	private volatile int[] level;
+    private volatile int[] victim;
 
 	public Filter(int numberOfThreads)
 	{

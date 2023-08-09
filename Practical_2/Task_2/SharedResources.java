@@ -4,7 +4,7 @@ import java.util.concurrent.locks.Lock;
 public class SharedResources
 {
 	private static int counter = 0;
-    private Lock l = new Filter(5);
+    private Lock l = new Bakery(5);
 
 	private Random random = new Random();
 	private int delay = random.nextInt(1000 - 200 + 1) + 200;

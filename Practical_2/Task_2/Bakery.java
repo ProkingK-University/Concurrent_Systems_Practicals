@@ -7,19 +7,19 @@ import java.util.concurrent.locks.Condition;
 
 public class Bakery implements Lock
 {
-	private int[] level;
-    private int[] victim;
 	private int numberOfThreads;
+    private volatile int[] label;
+	private volatile boolean[] flag;
 
 	public Bakery(int numberOfThreads)
 	{
-		level = new int[numberOfThreads];
-        victim = new int[numberOfThreads];
+        label = new int[numberOfThreads];
+		flag = new boolean[numberOfThreads];
         this.numberOfThreads = numberOfThreads;
 
         for (int i = 0; i < numberOfThreads; i++)
 		{
-            level[i] = 0;
+            label[i] = 0;
         }
     }
 
@@ -28,40 +28,37 @@ public class Bakery implements Lock
 	{
         int i = (int) (Thread.currentThread().threadId() % numberOfThreads);
 
-        for (int l = 1; l < numberOfThreads; l++)
+        flag[i] = true;
+        label[i] = max(label) + 1;
+        
+        for (int k = 0; k < numberOfThreads; k++)
 		{
-            level[i] = l;
-            victim[l] = i;
-
-			System.out.println(Thread.currentThread().getName() + ": " + "level[" + i + "] = " + l + " , victim[" + l + "] = " + i);
-
-            boolean conflicting = true;
-
-            while (conflicting)
-			{
-                conflicting = false;
-
-                for (int k = 0; k < numberOfThreads; k++)
-				{
-                    if (k != i && level[k] >= l && victim[l] == i)
-					{
-                        conflicting = true;
-
-                        break;
-                    }
-                }
-            }
+            while (flag[k] && ((label[k] < label[i]) || (label[k] == label[i] && k < i)));
         }
     }
 
 	@Override
 	public void unlock()
 	{
-
 		int i = (int) (Thread.currentThread().threadId() % numberOfThreads);
-        level[i] = 0;
+        flag[i] = false;
 		System.out.println(Thread.currentThread().getName() + ": ----------------------- DONE");
 	}
+
+	private int max(int[] array)
+	{
+        int max = array[0];
+
+        for (int value : array)
+		{
+            if (value > max)
+			{
+                max = value;
+            }
+        }
+
+        return max;
+    }
 
 	public boolean tryLock()
 	{

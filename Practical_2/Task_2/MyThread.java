@@ -1,7 +1,8 @@
-public class MyThread extends Thread {
+public class MyThread extends Thread
+{
     SharedResources criticalSection;
 
-	public MyThread(SharedResources CrSection )
+	public MyThread(SharedResources CrSection)
 	{
 		criticalSection = CrSection;
 	}
