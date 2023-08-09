@@ -33,6 +33,8 @@ public class Filter implements Lock
             level[i] = l;
             victim[l] = i;
 
+			System.out.println(Thread.currentThread().getName() + ": " + "level[" + i + "] = " + l + " , victim[" + l + "] = " + i);
+
             boolean conflicting = true;
 
             while (conflicting)
@@ -57,6 +59,7 @@ public class Filter implements Lock
 	{
 		int i = (int) Thread.currentThread().threadId();
         level[i] = 0;
+		System.out.println(Thread.currentThread().getName() + ": -------------------- DONE");
 	}
 
 	public boolean tryLock()

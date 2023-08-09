@@ -1,12 +1,30 @@
+import java.util.Random;
 import java.util.concurrent.locks.Lock;
 
 public class SharedResources
 {
-    Lock l;
 	private static int counter = 0;
+    private Lock l = new Filter(4);
+
+	private Random random = new Random();
+	private int delay = random.nextInt(1000 - 200 + 1) + 200;
 
 	public void access()
 	{
-		counter = counter + 1;
+        l.lock();
+		
+        try
+        {
+			counter = counter + 1;
+			Thread.sleep(delay);
+        }
+		catch (InterruptedException e)
+		{
+            e.printStackTrace();
+        }
+        finally
+        {
+            l.unlock();
+        }
 	}
 }
