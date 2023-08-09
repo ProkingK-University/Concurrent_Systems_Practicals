@@ -60,7 +60,7 @@ public class Filter implements Lock
 
 		int i = (int) (Thread.currentThread().threadId() % numberOfThreads);
         level[i] = 0;
-		System.out.println(Thread.currentThread().getName() + ": -------------------- DONE");
+		System.out.println(Thread.currentThread().getName() + ": ----------------------- DONE");
 	}
 
 	public boolean tryLock()
