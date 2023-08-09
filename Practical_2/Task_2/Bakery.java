@@ -30,10 +30,12 @@ public class Bakery implements Lock
 
         flag[i] = true;
         label[i] = max(label) + 1;
+
+		System.out.println(Thread.currentThread().getName() + ": " + "flag[" + i + "] = " + flag[i] + " , label[" + i + "] = " + label[i]);
         
         for (int k = 0; k < numberOfThreads; k++)
 		{
-            while (flag[k] && ((label[k] < label[i]) || (label[k] == label[i] && k < i)));
+            while (flag[k] && ((label[k] < label[i]) || (label[k] == label[i] && k < i))) {}
         }
     }
 
@@ -42,7 +44,7 @@ public class Bakery implements Lock
 	{
 		int i = (int) (Thread.currentThread().threadId() % numberOfThreads);
         flag[i] = false;
-		System.out.println(Thread.currentThread().getName() + ": ----------------------- DONE");
+		System.out.println(Thread.currentThread().getName() + ": ------------------------ DONE");
 	}
 
 	private int max(int[] array)
