@@ -8,9 +8,6 @@ public class MyThread extends Thread
         this.array = array;
     }
 
-    public MyThread(Integer[] array2, Range range) {
-    }
-
     @Override
     public void run()
     {
