@@ -10,5 +10,6 @@ public class MyThread extends Thread {
 	public void run()
 	{
 		criticalSection.access();
+		criticalSection.access();
 	}
 }
