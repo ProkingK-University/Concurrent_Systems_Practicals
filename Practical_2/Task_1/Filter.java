@@ -26,7 +26,7 @@ public class Filter implements Lock
 	@Override
     public void lock()
 	{
-        int i = (int) Thread.currentThread().threadId();
+        int i = (int) (Thread.currentThread().threadId() % numberOfThreads);
 
         for (int l = 1; l < numberOfThreads; l++)
 		{
@@ -57,7 +57,8 @@ public class Filter implements Lock
 	@Override
 	public void unlock()
 	{
-		int i = (int) Thread.currentThread().threadId();
+
+		int i = (int) (Thread.currentThread().threadId() % numberOfThreads);
         level[i] = 0;
 		System.out.println(Thread.currentThread().getName() + ": -------------------- DONE");
 	}
