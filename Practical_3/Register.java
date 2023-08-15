@@ -1,5 +1,7 @@
 package Practical_3;
 
-public class Register {
-    
+public interface Register<T> {
+    T read();
+
+    void write(T value);
 }
