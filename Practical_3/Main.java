@@ -1,13 +1,21 @@
 public class Main {
     public static void main(String[] args) {
-        Register<Boolean> register = new MRMW<Boolean>(1,true);
+        Register<Integer> register = new MRMW<Integer>(10,0);
 
-        Reader<Boolean> reader = new Reader<>(register);
-        Reader<Boolean> reader1 = new Reader<>(register);
-        Writer<Boolean> writer = new Writer<Boolean>(register, false);
+        @SuppressWarnings("unchecked")
+        Reader<Integer>[] readers = new Reader[10];
+        
+        @SuppressWarnings("unchecked")
+        Writer<Integer>[] writers = new Writer[10];
 
-        reader.start();
-        writer.start();
-        reader1.start();
+        for (int i = 0; i < 10; i++) {
+            readers[i] = new Reader<Integer>(register);
+            writers[i] = new Writer<Integer>(register, i);
+        }
+
+        for (int i = 0; i < writers.length; i++) {
+            readers[i].start();
+            writers[i].start();
+        }
     }
 }
