@@ -3,38 +3,38 @@ public class MRMW<T> implements Register<T> {
     private StampedValue<MRSW<T>>[] valueTable;
 
     @SuppressWarnings("unchecked")
-    public MRMW(int capacity, T init) {
+    public MRMW(int capacity, T initialValue) {
         this.capacity = capacity;
-        valueTable = (StampedValue<MRSW<T>>[]) new StampedValue[capacity];
+        valueTable = new StampedValue[capacity];
 
-        StampedValue<T> value = new StampedValue<T>(init);
+        StampedValue<T> initialValueStamped = new StampedValue<>(initialValue);
 
         for (int j = 0; j < valueTable.length; j++) {
-            valueTable[j] = (StampedValue<MRSW<T>>) value;
+            valueTable[j] = (StampedValue<MRSW<T>>) initialValueStamped;
         }
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    public void write(T value) {
+    @SuppressWarnings("unchecked")
+    public void write(T newValue) {
         int id = (int) (Thread.currentThread().threadId() % capacity);
 
-        StampedValue<T> max = StampedValue.MIN_VALUE;
+        StampedValue<T> max = (StampedValue<T>) StampedValue.MIN_VALUE;
 
         for (int i = 0; i < valueTable.length; i++) {
-            max = StampedValue.max(max, valueTable[i]);
+            max = (StampedValue<T>) StampedValue.max(max, valueTable[i]);
         }
 
-        valueTable[id] = new StampedValue(max.stamp + 1, value);
+        valueTable[id] = (StampedValue<MRSW<T>>) new StampedValue<>(max.stamp + 1, newValue);
     }
 
     @SuppressWarnings("unchecked")
     public T read() {
-        StampedValue<T> max = StampedValue.MIN_VALUE;
+        StampedValue<T> max = (StampedValue<T>) StampedValue.MIN_VALUE;
 
         for (int i = 0; i < valueTable.length; i++) {
-            max = StampedValue.max(max, valueTable[i]);
+            max = (StampedValue<T>) StampedValue.max(max, valueTable[i]);
         }
-        
+
         return max.value;
     }
 }
