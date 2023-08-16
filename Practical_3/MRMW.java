@@ -1,16 +1,16 @@
 public class MRMW<T> implements Register<T> {
     private int capacity;
-    private StampedValue<T>[] valueTable;
+    private StampedValue<MRSW<T>>[] valueTable;
 
     @SuppressWarnings("unchecked")
     public MRMW(int capacity, T init) {
         this.capacity = capacity;
-        valueTable = (StampedValue<T>[]) new StampedValue[capacity];
+        valueTable = (StampedValue<MRSW<T>>[]) new StampedValue[capacity];
 
         StampedValue<T> value = new StampedValue<T>(init);
 
         for (int j = 0; j < valueTable.length; j++) {
-            valueTable[j] = value;
+            valueTable[j] = (StampedValue<MRSW<T>>) value;
         }
     }
 
