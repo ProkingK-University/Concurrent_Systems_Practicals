@@ -1,5 +1,3 @@
-package Practical_3;
-
 public class StampedValue<T> {
     public T value;
     public long stamp;

@@ -1,5 +1,3 @@
-package Practical_3;
-
 public interface Register<T> {
     T read();
 

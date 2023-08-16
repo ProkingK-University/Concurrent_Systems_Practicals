@@ -1,5 +1,3 @@
-package Practical_3;
-
 public class MRMW<T> implements Register<T> {
     private int capacity;
     private StampedValue<T>[] valueTable;

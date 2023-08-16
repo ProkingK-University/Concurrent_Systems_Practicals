@@ -1,5 +1,3 @@
-package Practical_3;
-
 public class SRSW<T> implements Register<T> {
     StampedValue<T> r_value;
     ThreadLocal<Long> lastStamp;

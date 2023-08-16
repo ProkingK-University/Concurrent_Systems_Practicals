@@ -1,5 +1,3 @@
-package Practical_3;
-
 public class Writer<T> extends Thread {
     T value;
     Register<T> register;

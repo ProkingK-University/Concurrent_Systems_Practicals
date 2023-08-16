@@ -1,5 +1,3 @@
-package Practical_3;
-
 public class Reader<T> extends Thread {
 	Register<T> register;
 
