@@ -1,40 +1,31 @@
 public class SRSW<T> implements Register<T> {
-    StampedValue<T> r_value;
-    ThreadLocal<Long> lastStamp;
-    ThreadLocal<StampedValue<T>> lastRead;
+    private StampedValue<T> currentValue;
 
-    public SRSW(T value) {
-        r_value = new StampedValue<T>(value);
+    private ThreadLocal<Long> lastStamp;
+    private ThreadLocal<StampedValue<T>> lastReadValue;
 
-        lastStamp = new ThreadLocal<Long>() {
-            protected Long initialValue() {
-                return 0L;
-            };
-        };
+    public SRSW(T initialValue) {
+        currentValue = new StampedValue<>(initialValue);
 
-        lastRead = new ThreadLocal<StampedValue<T>>() {
-            protected StampedValue<T> initialValue() {
-                return r_value;
-            };
-        };
+        lastStamp = ThreadLocal.withInitial(() -> 0L);
+        lastReadValue = ThreadLocal.withInitial(() -> currentValue);
     }
 
     @SuppressWarnings("unchecked")
     public T read() {
-        StampedValue<T> value = r_value;
-        StampedValue<T> last = lastRead.get();
-        StampedValue<T> result = StampedValue.max(value, last);
+        StampedValue<T> value = currentValue;
+        StampedValue<T> readValue = lastReadValue.get();
+        StampedValue<T> result = (StampedValue<T>) StampedValue.max(value, readValue);
 
-        lastRead.set(result);
+        lastReadValue.set(result);
 
         return result.value;
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    public void write(T value) {
+    public void write(T newValue) {
         long stamp = lastStamp.get() + 1;
 
-        r_value = new StampedValue(stamp, value);
+        currentValue = new StampedValue<>(stamp, newValue);
         lastStamp.set(stamp);
     }
 }
