@@ -1,12 +1,10 @@
 public class StampedValue<T> {
     public T value;
     public long stamp;
-
-    @SuppressWarnings("rawtypes")
-    public static StampedValue MIN_VALUE = new StampedValue<>(null);
+    public static final StampedValue<?> MIN_VALUE = new StampedValue<>(null);
 
     public StampedValue(T value) {
-        stamp = 0;
+        this.stamp = 0;
         this.value = value;
     }
 
@@ -15,12 +13,7 @@ public class StampedValue<T> {
         this.value = value;
     }
 
-    @SuppressWarnings("rawtypes")
-    public static StampedValue max(StampedValue x, StampedValue y) {
-        if (x.stamp > y.stamp) {
-            return x;
-        } else {
-            return y;
-        }
+    public static StampedValue<?> max(StampedValue<?> x, StampedValue<?> y) {
+        return x.stamp > y.stamp ? x : y;
     }
 }
