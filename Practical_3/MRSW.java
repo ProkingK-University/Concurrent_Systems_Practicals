@@ -1,37 +1,33 @@
 public class MRSW<T> implements Register<T> {
-    int numOfReaders;
-    ThreadLocal<Long> lastStamp;
+    private int numReaders;
+    private ThreadLocal<Long> lastStamp;
     private StampedValue<SRSW<T>>[][] valueTable;
 
     @SuppressWarnings("unchecked")
-    public MRSW(T init, int readers) {
-        numOfReaders = readers;
+    public MRSW(T initialValue, int numReaders) {
+        this.numReaders = numReaders;
 
-        lastStamp = new ThreadLocal<Long>() {
-            protected Long initialValue() {
-                return 0L;
-            };
-        };
+        lastStamp = ThreadLocal.withInitial(() -> 0L);
 
-        valueTable = (StampedValue<SRSW<T>>[][]) new StampedValue[readers][readers];
+        valueTable = new StampedValue[numReaders][numReaders];
 
-        StampedValue<T> value = new StampedValue<T>(init);
+        StampedValue<T> initialValueStamped = new StampedValue<>(initialValue);
 
-        for (int i = 0; i < readers; i++) {
-            for (int j = 0; j < readers; j++) {
-                valueTable[i][j] = (StampedValue<SRSW<T>>) value;
+        for (int i = 0; i < numReaders; i++) {
+            for (int j = 0; j < numReaders; j++) {
+                valueTable[i][j] = (StampedValue<SRSW<T>>) initialValueStamped;
             }
         }
     }
 
     @SuppressWarnings("unchecked")
     public T read() {
-        int id = (int) (Thread.currentThread().threadId() % numOfReaders);
+        int id = (int) (Thread.currentThread().threadId() % numReaders);
 
         StampedValue<SRSW<T>> value = valueTable[id][id];
 
         for (int i = 0; i < valueTable.length; i++) {
-            value = StampedValue.max(value, valueTable[i][id]);
+            value = (StampedValue<SRSW<T>>) StampedValue.max(value, valueTable[i][id]);
         }
 
         for (int i = 0; i < valueTable.length; i++) {
@@ -42,19 +38,19 @@ public class MRSW<T> implements Register<T> {
             valueTable[id][i] = value;
         }
 
-        return (T) value.value;
+        return value.value.read();
     }
 
     @SuppressWarnings("unchecked")
-    public void write(T v) {
+    public void write(T newValue) {
         long stamp = lastStamp.get() + 1;
 
         lastStamp.set(stamp);
 
-        StampedValue<T> value = new StampedValue<T>(stamp, v);
+        StampedValue<T> stampedValue = new StampedValue<>(stamp, newValue);
 
         for (int i = 0; i < valueTable.length; i++) {
-            valueTable[i][i] = (StampedValue<SRSW<T>>) value;
+            valueTable[i][i] = (StampedValue<SRSW<T>>) stampedValue;
         }
     }
 }
