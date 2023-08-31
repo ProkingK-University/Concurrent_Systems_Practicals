@@ -55,8 +55,23 @@ public class Timeout implements Lock {
 
     public void unlock() {
         Node curr = node.get();
-        if (!tail.compareAndSet(curr, null))
+
+        while (curr != null) {
+
+            if (curr.prev != null) {
+                System.out.print("{" + Thread.currentThread().getName() + ":Request " + curr.requestNumber + "} -> ");
+            } else {
+                System.out.println("{" + Thread.currentThread().getName() + ":Request " + curr.requestNumber + "}");
+            }
+
+            curr = curr.prev;
+        }
+
+        curr = node.get();
+
+        if (!tail.compareAndSet(curr, null)) {
             curr.prev = AVAILABLE;
+        }
     }
 
     @Override
