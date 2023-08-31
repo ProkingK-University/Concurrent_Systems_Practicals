@@ -12,6 +12,10 @@ public class Node extends Thread {
 
 	@Override
 	public void run() {
-
+		printer.Print();
+		printer.Print();
+		printer.Print();
+		printer.Print();
+		printer.Print();
 	}
 }
