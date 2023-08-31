@@ -1,9 +1,13 @@
 public class Node extends Thread {
 
-	private Printer p;
+	public Node next;
+	public boolean locked;
+	private Printer printer;
 
-	Node(Printer _p) {
-		this.p = _p;
+	Node(Printer printer) {
+		next = null;
+		locked = false;
+		this.printer = printer;
 	}
 
 	@Override
