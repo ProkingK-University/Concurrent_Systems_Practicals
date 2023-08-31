@@ -1,8 +1,8 @@
 public class Node extends Thread {
 
-	public Node next;
-	public boolean locked;
 	private Printer printer;
+	public volatile Node next;
+	public volatile boolean locked;
 
 	Node(Printer printer) {
 		next = null;

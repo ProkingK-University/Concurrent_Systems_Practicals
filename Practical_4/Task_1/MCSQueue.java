@@ -22,8 +22,8 @@ public class MCSQueue implements Lock {
         Node prev = tail.getAndSet(curr);
 
         if (prev != null) {
-            prev.next = curr;
             curr.locked = true;
+            prev.next = curr;
 
             while (curr.locked) {}
         }
