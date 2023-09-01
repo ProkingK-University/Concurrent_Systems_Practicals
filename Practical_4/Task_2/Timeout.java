@@ -22,8 +22,11 @@ public class Timeout implements Lock {
     @Override
     public boolean tryLock(long time, TimeUnit unit) throws InterruptedException {
         Node curr = new Node(printer);
+        //curr.requestNumber++;
         node.set(curr);
+        //node.get().requestNumber++;
         Node prev = tail.getAndSet(curr);
+        //prev.requestNumber++;
 
         long startTime = System.currentTimeMillis();
         long patience = TimeUnit.MILLISECONDS.convert(time, unit);

@@ -1,7 +1,7 @@
 public class Node extends Thread {
 	private Printer printer;
-	public int requestNumber;
 	public volatile Node prev;
+	public volatile int requestNumber;
 
 	Node(Printer printer) {
 		prev = null;
