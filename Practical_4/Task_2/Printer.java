@@ -15,7 +15,7 @@ public class Printer {
 		try {
 			locked = lock.tryLock(10, TimeUnit.SECONDS);
 			String message = generateRandomString();
-			System.out.println(Thread.currentThread().getName() + ": " + requestNumber + " " + message);
+			System.out.println(Thread.currentThread().getName() + ": " + requestNumber + " printing " + message);
 			Thread.sleep(DELAY);
 		} catch (InterruptedException e) {
 			e.printStackTrace();

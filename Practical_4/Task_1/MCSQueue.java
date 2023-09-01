@@ -19,6 +19,7 @@ public class MCSQueue implements Lock {
     @Override
     public void lock() {
         Node curr = node.get();
+        curr.requestNumber++;
         Node prev = tail.getAndSet(curr);
 
         if (prev != null) {
@@ -32,6 +33,18 @@ public class MCSQueue implements Lock {
     @Override
     public void unlock() {
         Node curr = node.get();
+        
+        while (curr != null) {
+            if (curr.next != null) {
+                System.out.print("{" + curr.getName() + ":Request " + curr.requestNumber + "} -> ");
+            } else {
+                System.out.println("{" + curr.getName() + ":Request " + curr.requestNumber + "}");
+            }
+
+            curr = curr.next;
+        }
+
+        curr = node.get();
 
         if (curr.next == null) {
             if (tail.compareAndSet(curr, null)) {
@@ -51,8 +64,7 @@ public class MCSQueue implements Lock {
     }
 
     @Override
-    public void lockInterruptibly() {
-    }
+    public void lockInterruptibly() {}
 
     @Override
     public Condition newCondition() {

@@ -20,10 +20,6 @@ public class Timeout implements Lock {
     }
 
     @Override
-    public void lock() {
-    }
-
-    @Override
     public boolean tryLock(long time, TimeUnit unit) throws InterruptedException {
         Node curr = new Node(printer);
         node.set(curr);
@@ -31,7 +27,7 @@ public class Timeout implements Lock {
 
         long startTime = System.currentTimeMillis();
         long patience = TimeUnit.MILLISECONDS.convert(time, unit);
-
+        
         if (prev == null || prev.prev == AVAILABLE) {
             return true;
         }
@@ -45,7 +41,7 @@ public class Timeout implements Lock {
                 prev = prevPrev;
             }
         }
-
+        
         if (!tail.compareAndSet(curr, prev)) {
             curr.prev = prev;
         }
@@ -55,9 +51,9 @@ public class Timeout implements Lock {
 
     public void unlock() {
         Node curr = node.get();
-
+        
         while (curr != null) {
-
+            
             if (curr.prev != null) {
                 System.out.print("{" + Thread.currentThread().getName() + ":Request " + curr.requestNumber + "} -> ");
             } else {
@@ -66,23 +62,25 @@ public class Timeout implements Lock {
 
             curr = curr.prev;
         }
-
+        
         curr = node.get();
 
         if (!tail.compareAndSet(curr, null)) {
             curr.prev = AVAILABLE;
         }
     }
+    
+    @Override
+    public void lock() {}
 
     @Override
     public Condition newCondition() {
         return null;
     }
-
+    
     @Override
-    public void lockInterruptibly() {
-    }
-
+    public void lockInterruptibly() {}
+    
     @Override
     public boolean tryLock() {
         return false;

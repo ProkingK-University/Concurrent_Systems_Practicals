@@ -3,17 +3,16 @@ import java.security.SecureRandom;
 import java.util.concurrent.locks.Lock;
 
 public class Printer {
-	private int requestNumber = 0;
 	private Lock lock = new MCSQueue(this);
     private final long DELAY = (long) (Math.random() * 800 + 200);
 	private final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-	public void Print() {
+	public void Print(int requestNumber) {
 		lock.lock();
 
 		try {
 			String message = generateRandomString();
-			System.out.println(Thread.currentThread().getName() + ": " + requestNumber++ + " " + message);
+			System.out.println(Thread.currentThread().getName() + ": " + requestNumber + " printing " + message);
 			Thread.sleep(DELAY);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
