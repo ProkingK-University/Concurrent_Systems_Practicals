@@ -9,7 +9,6 @@ public class Printer {
 	private final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
 	public void Print(int requestNumber) {
-		boolean locked = false;
 		System.out.println(Thread.currentThread().getName() + ": " + requestNumber + " printing request.");
 		
 		try {
