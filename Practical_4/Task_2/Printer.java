@@ -12,7 +12,7 @@ public class Printer {
 		System.out.println(Thread.currentThread().getName() + ": " + requestNumber + " printing request.");
 		
 		try {
-			lock.tryLock(10, TimeUnit.SECONDS);
+			lock.tryLock(20, TimeUnit.SECONDS);
 			String message = generateRandomString();
 			System.out.println(Thread.currentThread().getName() + ": " + requestNumber + " printing " + message);
 			Thread.sleep(DELAY);
