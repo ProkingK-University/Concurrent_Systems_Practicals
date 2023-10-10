@@ -1,4 +1,3 @@
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class FineGrained implements Gallery {
@@ -36,19 +35,13 @@ public class FineGrained implements Gallery {
                 newNode.next = curr;
                 prev.next = newNode;
 
-                TimeUnit.MILLISECONDS.sleep(0);
-
                 return true;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             } finally {
                 curr.unlock();
             }
         } finally {
             prev.unlock();
         }
-
-        return false;
     }
 
     public boolean leave(int entrance, int id) {
