@@ -1,3 +1,6 @@
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ThreadLocalRandom;
+
 public class FineGrained implements Gallery {
     public ArtLover head;
 
@@ -33,13 +36,19 @@ public class FineGrained implements Gallery {
                 newNode.next = curr;
                 prev.next = newNode;
 
+                TimeUnit.MILLISECONDS.sleep(0);
+
                 return true;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             } finally {
                 curr.unlock();
             }
         } finally {
             prev.unlock();
         }
+
+        return false;
     }
 
     public boolean leave(int entrance, int id) {
@@ -61,6 +70,7 @@ public class FineGrained implements Gallery {
 
                 if (curr.id == id) {
                     prev.next = curr.next;
+
                     return true;
                 }
 
@@ -71,5 +81,17 @@ public class FineGrained implements Gallery {
         } finally {
             prev.unlock();
         }
+    }
+
+    public void print() {
+        ArtLover curr = head.next;
+
+        while (curr.next != null) {
+            int timeLeft = ThreadLocalRandom.current().nextInt(100, 400);
+            System.out.print("ArtLover-" + curr.id + " (" + timeLeft + "ms), ");
+            curr = curr.next;
+        }
+
+        System.out.println();
     }
 }
