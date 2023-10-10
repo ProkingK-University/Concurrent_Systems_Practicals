@@ -1,4 +1,4 @@
-public class FineGrained {
+public class FineGrained implements Gallery {
     public ArtLover head;
 
     public FineGrained() {
@@ -6,7 +6,7 @@ public class FineGrained {
         head.next = new ArtLover(Integer.MAX_VALUE);
     }
 
-    public boolean add(int id) {
+    public boolean enter(int entrance, int id) {
         head.lock();
 
         ArtLover prev = head;
@@ -42,7 +42,7 @@ public class FineGrained {
         }
     }
 
-    public boolean remove(int id) {
+    public boolean leave(int entrance, int id) {
         ArtLover prev = head;
 
         prev.lock();
