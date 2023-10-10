@@ -3,11 +3,13 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class ArtLover {
     public int id;
+    public boolean marked;
     public ArtLover next;
     private Lock lock = new ReentrantLock();
 
     public ArtLover(int id) {
         this.id = id;
+        marked = false;
         this.next = null;
     }
 
