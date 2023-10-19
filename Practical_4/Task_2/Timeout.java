@@ -5,25 +5,25 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class Timeout implements Lock {
     Printer printer;
-    ThreadLocal<Node> node;
-    AtomicReference<Node> tail;
-    static Node AVAILABLE = new Node(new Printer());
+    ThreadLocal<ArtLover> node;
+    AtomicReference<ArtLover> tail;
+    static ArtLover AVAILABLE = new ArtLover(new Printer());
 
     public Timeout(Printer printer) {
         this.printer = printer;
-        tail = new AtomicReference<Node>(null);
-        node = new ThreadLocal<Node>() {
-            protected Node initialValue() {
-                return new Node(printer);
+        tail = new AtomicReference<ArtLover>(null);
+        node = new ThreadLocal<ArtLover>() {
+            protected ArtLover initialValue() {
+                return new ArtLover(printer);
             }
         };
     }
 
     @Override
     public boolean tryLock(long time, TimeUnit unit) throws InterruptedException {
-        Node curr = (Node) Thread.currentThread();
+        ArtLover curr = (ArtLover) Thread.currentThread();
         node.set(curr);
-        Node prev = tail.getAndSet(curr);
+        ArtLover prev = tail.getAndSet(curr);
 
         long startTime = System.currentTimeMillis();
         long patience = TimeUnit.MILLISECONDS.convert(time, unit);
@@ -33,7 +33,7 @@ public class Timeout implements Lock {
         }
 
         while (System.currentTimeMillis() - startTime < patience) {
-            Node prevPrev = prev.prev;
+            ArtLover prevPrev = prev.prev;
 
             if (prevPrev == AVAILABLE) {
                 return true;
@@ -50,7 +50,7 @@ public class Timeout implements Lock {
     }
 
     public void unlock() {
-        Node curr = node.get();
+        ArtLover curr = node.get();
         
         while (curr != null) {
             
