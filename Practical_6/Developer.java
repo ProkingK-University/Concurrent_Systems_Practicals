@@ -1,10 +1,10 @@
 import java.util.concurrent.ThreadLocalRandom;
 
 class Developer extends Thread {
-    private final Database<Job> queue;
+    private final Database<Job> database;
 
-    public Developer(Database<Job> queue) {
-        this.queue = queue;
+    public Developer(Database<Job> database) {
+        this.database = database;
     }
 
     @Override
@@ -14,7 +14,7 @@ class Developer extends Thread {
             Job job = new Job(i, hours);
 
             try {
-                queue.insert(job);
+                database.insert(job);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
