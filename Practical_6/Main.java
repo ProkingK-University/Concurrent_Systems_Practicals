@@ -1,9 +1,7 @@
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 public class Main {
 
     public static void main(String[] args) {
-        ConcurrentLinkedQueue<Job> queue = new ConcurrentLinkedQueue<Job>();
+        LFQueue<Job> queue = new LFQueue<Job>();
 
         for (int i = 0; i < 4; i++) {
             Developer developer = new Developer(queue);
