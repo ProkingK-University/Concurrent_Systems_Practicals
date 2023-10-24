@@ -11,7 +11,7 @@ class Node<T> {
     }
 }
 
-public class LFQueue<T> {
+public class LFQueue<T> implements Database<T> {
     private AtomicReference<Node<T>> head;
     private AtomicReference<Node<T>> tail;
 
@@ -22,7 +22,7 @@ public class LFQueue<T> {
         tail = new AtomicReference<>(sentinel);
     }
 
-    public void enq(T value) {
+    public void insert(T value) {
         Node<T> node = new Node<>(value);
 
         while (true) {
@@ -43,7 +43,7 @@ public class LFQueue<T> {
         }
     }
 
-    public T deq() throws EmptyStackException {
+    public T remove() throws EmptyStackException {
         while (true) {
             Node<T> first = head.get();
             Node<T> last = tail.get();

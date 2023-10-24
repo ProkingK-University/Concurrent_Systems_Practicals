@@ -1,16 +1,23 @@
+import java.util.EmptyStackException;
 import java.util.concurrent.ThreadLocalRandom;
 
 class Administrator extends Thread {
-    private final LFQueue<Job> queue;
+    private final Database<Job> database;
 
-    public Administrator(LFQueue<Job> queue) {
-        this.queue = queue;
+    public Administrator(Database<Job> database) {
+        this.database = database;
     }
 
     @Override
     public void run() {
-        while (!queue.isEmpty()) {
-            Job job = queue.deq();
+        while (!database.isEmpty()) {
+            Job job = null;
+
+            try {
+                job = database.remove();
+            } catch (EmptyStackException | InterruptedException e) {
+                e.printStackTrace();
+            }
 
             if (job != null) {
                 int randomHours = ThreadLocalRandom.current().nextInt(1, 25);
